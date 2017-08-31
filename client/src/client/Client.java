@@ -72,6 +72,41 @@ class Pully{}
 // class to push data to mysql server
 class Pusher{}
 
+// class to execute sql statements against mysql db
+// takes sql statement in as string, opens connection, executes satement, returns results
+class sqlizer
+{
+    String command = "";
+    
+    void exec(String commandIn)
+    {
+        command = commandIn;
+        
+        try
+        {
+            // Set connection, statement, result set
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/$DBNAME","$USER","$PASS");
+            Statement statement = connection.createStatement();
+            ResultSet results = statement.executeQuery(command);
+            
+            // while there are results, print them (debug purposes, final client will not print these)
+            while(results.next())
+            {
+                System.out.println(results.next());
+            }
+            
+            // When done, close the connection
+            connection.close();
+        }
+        // If an error occurs, throw error message and print stack trace
+        catch(SQLException e)
+        {
+            System.out.println("Error: Unexpected SQL exception");
+            e.printStackTrace();
+        }
+    }
+}
+
 // class to display menu based on current gamestate (main menu, actions menu, etc.)
 class Display
 {
