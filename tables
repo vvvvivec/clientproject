@@ -1,0 +1,42 @@
+Database table planning 
+
+table players
+	playerid
+	fname
+	lname
+	email
+	pass
+
+Note: default vals are used for testing purposes only and are not final
+
+table kingdoms formula
+	kingdomid
+	playerid
+	name
+	gold													
+	land 													
+	housing	
+	pop housing*10								
+	civs pop-soldiers							
+	soldiers												
+	upkeep 1g/soldier 
+	troopcap .1*pop
+	infantry
+	archers
+	cavalry
+	goods civs*land 
+	marketrate .5
+	civincome marketrate * goods
+	taxrate .4*civincome
+	
+
+table worlds
+	worldid
+	initdate
+	nowdate
+	numkingdoms
+	numplayers
+	numgold
+	numcivs
+	numsoldiers
+	numland
