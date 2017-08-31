@@ -14,6 +14,10 @@ public class Client {
     // execute main program logic
     public static void main(String[] args) 
     {
+        // SQL connection test
+        Sqlizer sqlrun = new Sqlizer();
+        sqlrun.exec("SELECT * FROM players");
+        
         // PROGRAM LOGIC FLOW
         
         // ENTER MAIN MENU
@@ -74,7 +78,7 @@ class Pusher{}
 
 // class to execute sql statements against mysql db
 // takes sql statement in as string, opens connection, executes satement, returns results
-class sqlizer
+class Sqlizer
 {
     String command = "";
     
@@ -85,14 +89,22 @@ class sqlizer
         try
         {
             // Set connection, statement, result set
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/$DBNAME","$USER","$PASS");
+            // for debugging , replace $HOST, $USER, $PASS with actual vals
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/$HOST","$USER","$PASS");
             Statement statement = connection.createStatement();
             ResultSet results = statement.executeQuery(command);
+            ResultSetMetaData resultsMeta = results.getMetaData();
             
+            // TESTED SUCCESSFUL AS OF 083117@1027
             // while there are results, print them (debug purposes, final client will not print these)
             while(results.next())
             {
-                System.out.println(results.next());
+                int numColumns = resultsMeta.getColumnCount();
+                for (int i =1; i < numColumns; i ++)
+                {
+                    System.out.print(results.getString(i) + " ");
+                }
+                System.out.println();
             }
             
             // When done, close the connection
