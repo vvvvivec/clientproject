@@ -39,7 +39,7 @@ CREATE TABLE `players` (
 
 LOCK TABLES `players` WRITE;
 /*!40000 ALTER TABLE `players` DISABLE KEYS */;
-INSERT INTO `players` VALUES (1,'brian','durham','testemail@mail.com','*C7793F39251BD7AB1EDC1D97B9ED4ADFD3986556'),(2,'brian2','d2','emailtest@mail.com','*C7793F39251BD7AB1EDC1D97B9ED4ADFD3986556');
+INSERT INTO `players` VALUES (1,'brian','durham','testemail@mail.com','*REDACTED'),(2,'brian2','d2','emailtest@mail.com','*REDACTED');
 /*!40000 ALTER TABLE `players` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
