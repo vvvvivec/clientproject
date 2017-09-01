@@ -14,9 +14,6 @@ public class Client {
     // execute main program logic
     public static void main(String[] args) 
     {
-        // SQL connection test
-        Sqlizer sqlrun = new Sqlizer();
-        sqlrun.exec("SELECT * FROM players");
         
         // PROGRAM LOGIC FLOW
         
@@ -82,8 +79,9 @@ class Sqlizer
 {
     String command = "";
     
-    void exec(String commandIn)
+    String exec(String commandIn)
     {
+        String output = null;
         command = commandIn;
         
         try
@@ -102,7 +100,9 @@ class Sqlizer
                 int numColumns = resultsMeta.getColumnCount();
                 for (int i =1; i < numColumns; i ++)
                 {
-                    System.out.print(results.getString(i) + " ");
+                    // DEV NOTE , this is probably broken , will need testing and refinement
+                    output += results.getString(i);
+                    System.out.print(output + " ");
                 }
                 System.out.println();
             }
@@ -116,6 +116,8 @@ class Sqlizer
             System.out.println("Error: Unexpected SQL exception");
             e.printStackTrace();
         }
+        
+        return output;
     }
 }
 
@@ -167,5 +169,58 @@ class Display
             
             }
         }
+    }
+}
+
+// Class for account creation
+class Creator
+{
+    String fname = "";
+    String lname = "";
+    String email = "";
+    String pass = "";
+    String response = null;
+    
+    void createPlayer()
+    {
+        PlayerInput input = new PlayerInput();
+        Sqlizer sqlizer = new Sqlizer();
+        
+        // Prompt player for account email 
+        System.out.println("\nACCOUNT CREATION");
+       
+        // Loop logic until valid email obtained
+        int looper = 1;
+        while (looper == 1)
+        {
+            System.out.println("\nEMAIL ADDRESS?");
+            email = input.Scan();
+
+            // Check if email exists on server
+            String command = "SELECT * FROM players WHERE email LIKE " + email + ";";
+            response = sqlizer.exec(command);
+            
+             // If email exists , throw error and prompt for different email
+            if(response != null)
+            {
+                System.out.println("\nERROR: An account with that email already exists");
+            }
+            else
+            {
+                looper = 0;
+            }
+        }       
+        
+        // If email doesn't exist already , get rest of acct vars 
+        System.out.println("\nFIRST NAME?");
+        fname = input.Scan();
+        System.out.println("\nLAST NAME?");
+        lname = input.Scan();
+        System.out.println("\nPASSWORD?");
+        pass = input.Scan();
+        
+        // Insert record into DB 
+        String insertdata = "INSERT INTO players (fname,lname,email,pass) VALUES (\"" + fname + "\",\"" + lname + "\",\"" + email + "\",PASSWORD(\"" + pass + "\")";
+        sqlizer.exec(insertdata);
     }
 }
